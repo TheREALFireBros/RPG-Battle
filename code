@@ -1,0 +1,70 @@
+import os
+os.system('cls' if os.name == 'nt' else 'clear')
+
+import random as rand
+from random import randint
+
+def number_check(number):
+    if number < 0:
+        return 0
+    if isinstance(number, float) and number.is_integer():
+        return int(number)
+    return number
+
+difficulty_choice=""
+boss_hp=100
+ur_hp=100
+ur_move=""
+boss_move=""
+ur_damage=0
+boss_damage=0
+round=0
+
+while difficulty_choice not in{"e", "easy", "m", "med", "medium", "h", "hard"}:
+  difficulty_choice=input('Choose a difficulty. Type "easy/e," "med/meduim/m," or "hard/h": ').lower()
+  if difficulty_choice=="easy"or difficulty_choice=="e":
+    boss_hp=50
+  elif difficulty_choice=="hard"or difficulty_choice=="h":
+    boss_hp=150
+  else:
+    boss_hp=100
+
+while boss_hp > 0 and ur_hp > 0:
+  round+=1
+  print(f"----------Round {round}----------")
+  print(f"Boss HP: {boss_hp}")
+  print(f"Your HP: {ur_hp}")
+
+  while ur_move not in {"a", "attack:", "d", "defend"}:
+    ur_move=input('Choose your move. Type "attack/a" or "defend/d": ').lower()
+    if ur_move in {"d", "defend"}:
+      print("You defended!")
+
+  boss_move=rand.choice(("a", "d"))
+  if boss_move=="a":
+     boss_damage=randint(5, 10)
+     if ur_move in {"d", "defend"}:
+       boss_damage/=4
+     ur_hp-=boss_damage
+     print(f"The boss did {number_check(boss_damage)} damage! You have {number_check(ur_hp)} HP left")
+
+  if ur_move in {"a", "attack"}:
+    ur_damage = randint(5, 10)
+    if boss_move == "d":
+      print("The boss defended!")
+      ur_damage /= 4
+    boss_hp-=ur_damage
+    print(f"You did {number_check(ur_damage)} damage! The boss has {number_check(boss_hp)} HP left!")
+
+  if ur_move in {"d", "defend"} and boss_move == "d":
+     print("Both of you defended. Nothing happened.")
+
+  if boss_hp > 0 and ur_hp <= 0:
+    print("You lost...")
+  elif boss_hp <= 0 and ur_hp > 0:
+    print("You win!")
+  elif boss_hp <= 0 and ur_hp <= 0:
+    print("It's a tie!")
+
+  ur_move=""
+  boss_move=""
